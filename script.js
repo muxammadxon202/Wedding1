@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. БАЗА ДАННЫХ ГОСТЕЙ (СЕКРЕТНЫЙ КОД : ИМЯ)
     // ==========================================
     const guestList = {
-        "1": "Иброхим ака ва оиласи",
+        "1": "Курсдошларим",
         "2": "Сардор",
         "3": "Умид ака ва оиласи",
         "4": "Дониёр",
@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     // 5. ТАЙМЕР (16 АВГУСТА 2026)
     // ==========================================
-    const targetDate = new Date('August 16, 2026 18:00:00').getTime();
+    const targetDate = new Date('May 2, 2026 11:00:00').getTime();
 
     setInterval(() => {
         const now = new Date().getTime();
