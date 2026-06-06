@@ -88,24 +88,8 @@
         }
         .frame-svg { width: 100%; height: 100%; }
 
-        /* ── MUSIC BTN ── */
-        #music-btn {
-            position: fixed;
-            bottom: 20px; right: calc(50% - 230px);
-            z-index: 9000;
-            width: 46px; height: 46px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--gold-light), var(--gold));
-            border: none;
-            cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 16px rgba(201,162,39,0.4);
-            transition: transform 0.2s;
-        }
-        #music-btn:active { transform: scale(0.93); }
-        #music-btn svg { width: 20px; height: 20px; fill: white; }
-        #music-btn.playing .note-icon { animation: pulse-note 1.2s ease-in-out infinite alternate; }
-        @keyframes pulse-note { 0%{transform:scale(0.9) rotate(-5deg)} 100%{transform:scale(1.1) rotate(5deg)} }
+        /* ── MUSIC BTN — hidden ── */
+        #music-btn { display: none !important; }
 
         /* ── RINGS OVERLAY ── */
         #rings-overlay {
@@ -127,14 +111,98 @@
             justify-content: center;
             align-items: center;
         }
-        .ring-svg {
-            width: 120px; height: 120px;
+        /* ── 3D TORUS RINGS ── */
+        .ring-3d-wrap {
             position: absolute;
-            filter: drop-shadow(0 10px 28px rgba(201,162,39,0.7));
+            width: 130px; height: 130px;
+            perspective: 400px;
+            display: flex; align-items: center; justify-content: center;
+            filter: drop-shadow(0 14px 28px rgba(140,100,0,0.6));
         }
-        #ring-left { left: 8px; }
-        #ring-right { right: 8px; }
+        #ring-left { left: 0px; }
+        #ring-right { right: 0px; }
 
+        .ring-3d {
+            width: 110px; height: 110px;
+            position: relative;
+            transform-style: preserve-3d;
+        }
+        .ring-3d-left  { transform: rotateX(70deg) rotateZ(-20deg); animation: ring3d-spin-l 8s linear infinite; }
+        .ring-3d-right { transform: rotateX(70deg) rotateZ(20deg); animation: ring3d-spin-r 8s linear infinite; }
+        @keyframes ring3d-spin-l {
+            0%   { transform: rotateX(70deg) rotateZ(-20deg); }
+            100% { transform: rotateX(70deg) rotateZ(340deg); }
+        }
+        @keyframes ring3d-spin-r {
+            0%   { transform: rotateX(70deg) rotateZ(20deg); }
+            100% { transform: rotateX(70deg) rotateZ(380deg); }
+        }
+
+        .torus-band {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            /* Gold ring band via thick border */
+            border: 20px solid transparent;
+            background:
+                /* outer gold rim */
+                radial-gradient(circle at 35% 30%, #fff7b0 0%, #f5d060 18%, #c9a227 42%, #8a6500 68%, #4a3200 100%)
+                border-box;
+            -webkit-mask:
+                linear-gradient(#fff 0 0) padding-box,
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: destination-out;
+            mask-composite: exclude;
+            box-shadow:
+                inset 0 0 0 2px rgba(255,240,120,0.5),
+                inset 0 0 12px rgba(255,200,50,0.3),
+                0 0 18px rgba(200,160,30,0.4);
+        }
+        /* The hole fill (cream/ivory interior of ring) */
+        .torus-inner {
+            position: absolute;
+            inset: 20px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 50% 45%, #fefdf0 0%, #f2e8c0 60%, #e0cc90 100%);
+        }
+        /* Shiny highlight arc on top */
+        .torus-highlight {
+            position: absolute;
+            top: 6px; left: 18px;
+            width: 50px; height: 22px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(-30deg);
+            pointer-events: none;
+        }
+        /* Diamond studs on left ring */
+        .torus-diamond {
+            position: absolute;
+            top: -4px; left: 50%; transform: translateX(-50%);
+            width: 8px; height: 8px;
+            background: radial-gradient(circle at 35% 30%, #ffffff 0%, #d0f0ff 50%, #90c8e8 100%);
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            box-shadow: 0 0 6px rgba(200,240,255,0.9);
+        }
+        .torus-diamond.d2 {
+            top: 10px; left: calc(50% + 30px);
+            transform: translateX(-50%) scale(0.75);
+        }
+        .torus-diamond.d3 {
+            top: 10px; left: calc(50% - 30px);
+            transform: translateX(-50%) scale(0.75);
+        }
+        /* Solitaire for right ring */
+        .torus-solitaire {
+            position: absolute;
+            top: -10px; left: 50%; transform: translateX(-50%);
+            width: 14px; height: 18px;
+            background: linear-gradient(145deg, #ffffff 0%, #d8f4ff 35%, #90cce8 65%, #5aa8d0 100%);
+            clip-path: polygon(50% 0%, 90% 40%, 50% 100%, 10% 40%);
+            box-shadow: 0 0 10px rgba(180,230,255,0.95), 0 0 3px rgba(255,255,255,1);
+        }
+
+        /* Animation keyframes — drop & clash use transforms on the wrap, not the 3d element */
         @keyframes ringDropLeft {
             0%   { transform: translate(-150px,-320px) rotate(-45deg) scale(0.6); opacity:0; }
             50%  { opacity:1; }
@@ -161,15 +229,15 @@
             80%  { transform: translate(-10px,5px) rotate(1deg); }
             100% { transform: translate(-7px,5px) rotate(2deg); }
         }
+        @keyframes ringFadeUp {
+            0%   { opacity:1; transform:translateY(0) scale(1); }
+            100% { opacity:0; transform:translateY(-90px) scale(0.5); }
+        }
         @keyframes clashFlash {
             0%   { opacity:0; transform:translate(-50%,-50%) scale(0); }
             35%  { opacity:1; transform:translate(-50%,-50%) scale(2.2); }
             70%  { opacity:0.5; transform:translate(-50%,-50%) scale(1.4); }
             100% { opacity:0; transform:translate(-50%,-50%) scale(0.5); }
-        }
-        @keyframes ringFadeUp {
-            0%   { opacity:1; transform:translateY(0) scale(1); }
-            100% { opacity:0; transform:translateY(-90px) scale(0.5); }
         }
         #clash-flash {
             position: absolute;
@@ -414,8 +482,10 @@
         }
 
         .btn-map {
-            display: inline-block;
+            display: block;
             margin-top: 16px;
+            margin-left: auto;
+            margin-right: auto;
             padding: 12px 26px;
             border: 1.5px solid var(--gold);
             color: var(--gold-dark);
@@ -427,6 +497,8 @@
             letter-spacing: 1.5px;
             text-transform: uppercase;
             transition: all 0.3s;
+            text-align: center;
+            width: fit-content;
         }
         .btn-map:hover { background: var(--gold); color: white; }
 
@@ -735,104 +807,28 @@
     <!-- Rings overlay -->
     <div id="rings-overlay" class="hidden">
         <div id="rings-container">
-            <!-- LEFT RING — 3D photorealistic gold -->
-            <svg id="ring-left" class="ring-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <radialGradient id="rG1" cx="38%" cy="30%" r="65%">
-                        <stop offset="0%" stop-color="#fff7b0"/>
-                        <stop offset="20%" stop-color="#f5d060"/>
-                        <stop offset="45%" stop-color="#c9a227"/>
-                        <stop offset="70%" stop-color="#8a6500"/>
-                        <stop offset="100%" stop-color="#4a3200"/>
-                    </radialGradient>
-                    <radialGradient id="rI1" cx="50%" cy="50%" r="50%">
-                        <stop offset="0%" stop-color="#fefef5"/>
-                        <stop offset="60%" stop-color="#f5eccc"/>
-                        <stop offset="100%" stop-color="#e8d8a0"/>
-                    </radialGradient>
-                    <radialGradient id="rS1" cx="35%" cy="25%" r="55%">
-                        <stop offset="0%" stop-color="#fffde0" stop-opacity="0.9"/>
-                        <stop offset="100%" stop-color="#c9a227" stop-opacity="0"/>
-                    </radialGradient>
-                    <!-- bottom shadow -->
-                    <radialGradient id="rSh1" cx="50%" cy="50%" r="50%">
-                        <stop offset="0%" stop-color="#8a6500" stop-opacity="0.5"/>
-                        <stop offset="100%" stop-color="#8a6500" stop-opacity="0"/>
-                    </radialGradient>
-                </defs>
-                <!-- torus shadow -->
-                <ellipse cx="60" cy="78" rx="42" ry="13" fill="url(#rSh1)" opacity="0.4"/>
-                <!-- outer ring band -->
-                <circle cx="60" cy="58" r="44" fill="url(#rG1)"/>
-                <!-- inner hole -->
-                <circle cx="60" cy="58" r="31" fill="url(#rI1)"/>
-                <!-- lower torus arc (depth) -->
-                <path d="M16,58 Q16,90 60,90 Q104,90 104,58" fill="url(#rG1)" opacity="0.75"/>
-                <path d="M29,58 Q29,80 60,80 Q91,80 91,58" fill="url(#rI1)" opacity="0.88"/>
-                <!-- top highlight streak -->
-                <ellipse cx="44" cy="36" rx="10" ry="5" fill="url(#rS1)" transform="rotate(-30,44,36)"/>
-                <ellipse cx="55" cy="30" rx="6" ry="3" fill="white" opacity="0.55" transform="rotate(-20,55,30)"/>
-                <!-- diamonds along top -->
-                <g fill="white" opacity="0.95">
-                    <polygon points="60,16 62,20 60,24 58,20" /><!-- center -->
-                    <polygon points="75,21 77,25 75,29 73,25" />
-                    <polygon points="45,21 47,25 45,29 43,25" />
-                </g>
-                <g fill="#e8f8ff" opacity="0.7">
-                    <polygon points="86,32 87.5,35 86,38 84.5,35"/>
-                    <polygon points="34,32 35.5,35 34,38 32.5,35"/>
-                </g>
-                <!-- engraving lines -->
-                <path d="M22,58 Q22,86 60,86 Q98,86 98,58" fill="none" stroke="#c9a227" stroke-width="0.5" opacity="0.3"/>
-                <!-- side sheen -->
-                <path d="M17,50 Q30,42 44,44" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.35"/>
-            </svg>
+            <!-- 3D CSS Torus rings -->
+            <div id="ring-left" class="ring-3d-wrap">
+                <div class="ring-3d ring-3d-left">
+                    <div class="torus-band">
+                        <div class="torus-inner"></div>
+                        <div class="torus-highlight"></div>
+                        <div class="torus-diamond"></div>
+                        <div class="torus-diamond d2"></div>
+                        <div class="torus-diamond d3"></div>
+                    </div>
+                </div>
+            </div>
 
-            <!-- RIGHT RING -->
-            <svg id="ring-right" class="ring-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <radialGradient id="rG2" cx="38%" cy="30%" r="65%">
-                        <stop offset="0%" stop-color="#fff7b0"/>
-                        <stop offset="20%" stop-color="#f5d060"/>
-                        <stop offset="45%" stop-color="#c9a227"/>
-                        <stop offset="70%" stop-color="#8a6500"/>
-                        <stop offset="100%" stop-color="#4a3200"/>
-                    </radialGradient>
-                    <radialGradient id="rI2" cx="50%" cy="50%" r="50%">
-                        <stop offset="0%" stop-color="#fefef5"/>
-                        <stop offset="60%" stop-color="#f5eccc"/>
-                        <stop offset="100%" stop-color="#e8d8a0"/>
-                    </radialGradient>
-                    <radialGradient id="rS2" cx="35%" cy="25%" r="55%">
-                        <stop offset="0%" stop-color="#fffde0" stop-opacity="0.9"/>
-                        <stop offset="100%" stop-color="#c9a227" stop-opacity="0"/>
-                    </radialGradient>
-                    <radialGradient id="rSh2" cx="50%" cy="50%" r="50%">
-                        <stop offset="0%" stop-color="#8a6500" stop-opacity="0.5"/>
-                        <stop offset="100%" stop-color="#8a6500" stop-opacity="0"/>
-                    </radialGradient>
-                </defs>
-                <ellipse cx="60" cy="78" rx="42" ry="13" fill="url(#rSh2)" opacity="0.4"/>
-                <circle cx="60" cy="58" r="44" fill="url(#rG2)"/>
-                <circle cx="60" cy="58" r="31" fill="url(#rI2)"/>
-                <path d="M16,58 Q16,90 60,90 Q104,90 104,58" fill="url(#rG2)" opacity="0.75"/>
-                <path d="M29,58 Q29,80 60,80 Q91,80 91,58" fill="url(#rI2)" opacity="0.88"/>
-                <ellipse cx="44" cy="36" rx="10" ry="5" fill="url(#rS2)" transform="rotate(-30,44,36)"/>
-                <ellipse cx="55" cy="30" rx="6" ry="3" fill="white" opacity="0.55" transform="rotate(-20,55,30)"/>
-                <!-- solitaire diamond on right ring -->
-                <g transform="translate(60,14)">
-                    <polygon points="0,-9 6,-3 0,7 -6,-3" fill="#e8f8ff" opacity="0.95"/>
-                    <polygon points="0,-9 6,-3 0,-1" fill="white" opacity="0.9"/>
-                    <polygon points="0,7 6,-3 0,-1" fill="#b8e0f0" opacity="0.8"/>
-                    <polygon points="0,7 -6,-3 0,-1" fill="#d0f0ff" opacity="0.7"/>
-                </g>
-                <g fill="white" opacity="0.85">
-                    <polygon points="76,21 77.5,25 76,29 74.5,25"/>
-                    <polygon points="44,21 45.5,25 44,29 42.5,25"/>
-                </g>
-                <path d="M22,58 Q22,86 60,86 Q98,86 98,58" fill="none" stroke="#c9a227" stroke-width="0.5" opacity="0.3"/>
-                <path d="M17,50 Q30,42 44,44" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.35"/>
-            </svg>
+            <div id="ring-right" class="ring-3d-wrap">
+                <div class="ring-3d ring-3d-right">
+                    <div class="torus-band">
+                        <div class="torus-inner"></div>
+                        <div class="torus-highlight"></div>
+                        <div class="torus-solitaire"></div>
+                    </div>
+                </div>
+            </div>
 
             <div id="clash-flash"></div>
         </div>
@@ -843,117 +839,133 @@
         <div class="welcome-card">
             <!-- Interlocked 3D rings on welcome -->
             <div class="welcome-rings">
-                <svg viewBox="0 0 220 130" width="220" height="130" xmlns="http://www.w3.org/2000/svg">
+                <svg viewBox="0 0 240 145" width="240" height="145" xmlns="http://www.w3.org/2000/svg">
                     <defs>
-                        <radialGradient id="wG" cx="35%" cy="28%" r="68%">
+                        <!-- Gold gradient for ring tube -->
+                        <linearGradient id="tubeG" x1="0%" y1="0%" x2="100%" y2="100%">
                             <stop offset="0%" stop-color="#fff9c0"/>
-                            <stop offset="18%" stop-color="#f5d060"/>
-                            <stop offset="42%" stop-color="#c9a227"/>
-                            <stop offset="72%" stop-color="#8a6500"/>
+                            <stop offset="15%" stop-color="#f5d878"/>
+                            <stop offset="40%" stop-color="#c9a227"/>
+                            <stop offset="70%" stop-color="#8a6500"/>
                             <stop offset="100%" stop-color="#4a3200"/>
-                        </radialGradient>
-                        <radialGradient id="wI" cx="50%" cy="45%" r="50%">
+                        </linearGradient>
+                        <!-- Ivory for hole interior -->
+                        <radialGradient id="holeG" cx="50%" cy="35%" r="60%">
                             <stop offset="0%" stop-color="#fefdf0"/>
-                            <stop offset="70%" stop-color="#f2e8c0"/>
                             <stop offset="100%" stop-color="#e8d8a0"/>
                         </radialGradient>
-                        <radialGradient id="wG2" cx="62%" cy="28%" r="68%">
-                            <stop offset="0%" stop-color="#fff9c0"/>
-                            <stop offset="18%" stop-color="#f5d060"/>
-                            <stop offset="42%" stop-color="#c9a227"/>
-                            <stop offset="72%" stop-color="#8a6500"/>
-                            <stop offset="100%" stop-color="#4a3200"/>
+                        <!-- Specular highlight -->
+                        <radialGradient id="specG" cx="30%" cy="20%" r="60%">
+                            <stop offset="0%" stop-color="rgba(255,255,255,0.9)"/>
+                            <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
                         </radialGradient>
-                        <radialGradient id="wI2" cx="50%" cy="45%" r="50%">
-                            <stop offset="0%" stop-color="#fefdf0"/>
-                            <stop offset="70%" stop-color="#f2e8c0"/>
-                            <stop offset="100%" stop-color="#e8d8a0"/>
+                        <!-- Shadow under rings -->
+                        <radialGradient id="shadowG" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="rgba(80,50,0,0.35)"/>
+                            <stop offset="100%" stop-color="rgba(80,50,0,0)"/>
                         </radialGradient>
-                        <filter id="glow"><feGaussianBlur stdDeviation="2.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-                        <filter id="ringShadow"><feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="#8a6500" flood-opacity="0.45"/></filter>
+                        <filter id="rGlow">
+                            <feGaussianBlur stdDeviation="3" result="blur"/>
+                            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                        </filter>
+                        <filter id="rShadow">
+                            <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#6a4500" flood-opacity="0.5"/>
+                        </filter>
                     </defs>
 
-                    <!-- Floating petals behind rings -->
-                    <ellipse cx="50" cy="25" rx="7" ry="4" fill="#ffb3cc" opacity="0.55" transform="rotate(-30,50,25)"/>
-                    <ellipse cx="170" cy="20" rx="6" ry="3.5" fill="#ffd0e0" opacity="0.5" transform="rotate(25,170,20)"/>
-                    <ellipse cx="30" cy="80" rx="5" ry="3" fill="#ffb3cc" opacity="0.45" transform="rotate(15,30,80)"/>
-                    <ellipse cx="190" cy="85" rx="6" ry="3.5" fill="#ffd0e0" opacity="0.5" transform="rotate(-20,190,85)"/>
-                    <ellipse cx="110" cy="15" rx="5" ry="2.8" fill="#ffc0d4" opacity="0.4" transform="rotate(10,110,15)"/>
+                    <!-- Floating sakura petals background -->
+                    <ellipse cx="38" cy="22" rx="8" ry="5" fill="#ffb3cc" opacity="0.5" transform="rotate(-35,38,22)"/>
+                    <ellipse cx="202" cy="18" rx="7" ry="4" fill="#ffd0e0" opacity="0.45" transform="rotate(28,202,18)"/>
+                    <ellipse cx="22" cy="90" rx="6" ry="3.5" fill="#ffb3cc" opacity="0.4" transform="rotate(15,22,90)"/>
+                    <ellipse cx="218" cy="95" rx="7" ry="4" fill="#ffd0e0" opacity="0.42" transform="rotate(-18,218,95)"/>
+                    <ellipse cx="120" cy="10" rx="5" ry="3" fill="#ffc0d4" opacity="0.38" transform="rotate(8,120,10)"/>
 
-                    <!-- GOLD BUTTERFLIES floating -->
-                    <g transform="translate(42,18)" opacity="0.75">
-                        <path d="M0,0 C-6,-8 -14,-4 -10,2 C-6,8 -2,4 0,0Z" fill="#f0d060"/>
-                        <path d="M0,0 C6,-8 14,-4 10,2 C6,8 2,4 0,0Z" fill="#c9a227"/>
+                    <!-- Gold butterflies -->
+                    <g transform="translate(48,14)" opacity="0.72">
+                        <path d="M0,0 C-7,-9 -16,-5 -11,2 C-6,9 -2,5 0,0Z" fill="#f0d060"/>
+                        <path d="M0,0 C7,-9 16,-5 11,2 C6,9 2,5 0,0Z" fill="#c9a227"/>
+                        <line x1="0" y1="0" x2="0" y2="4" stroke="#8a6500" stroke-width="0.5"/>
                     </g>
-                    <g transform="translate(178,22) scale(0.85)" opacity="0.7">
-                        <path d="M0,0 C-6,-8 -14,-4 -10,2 C-6,8 -2,4 0,0Z" fill="#c9a227"/>
-                        <path d="M0,0 C6,-8 14,-4 10,2 C6,8 2,4 0,0Z" fill="#f0d060"/>
-                    </g>
-
-                    <!-- LEFT RING — tilted -15deg, drawn first (behind right) -->
-                    <g id="wrl" filter="url(#ringShadow)" transform="rotate(-12,80,65)">
-                        <!-- outer torus gold -->
-                        <circle cx="80" cy="65" r="38" fill="url(#wG)"/>
-                        <!-- inner hole -->
-                        <circle cx="80" cy="65" r="26" fill="url(#wI)"/>
-                        <!-- lower torus depth arc -->
-                        <path d="M42,65 Q42,92 80,92 Q118,92 118,65" fill="url(#wG)" opacity="0.7"/>
-                        <path d="M54,65 Q54,84 80,84 Q106,84 106,65" fill="url(#wI)" opacity="0.85"/>
-                        <!-- top highlight -->
-                        <ellipse cx="65" cy="43" rx="10" ry="5" fill="white" opacity="0.5" transform="rotate(-25,65,43)"/>
-                        <ellipse cx="74" cy="38" rx="6" ry="3" fill="white" opacity="0.45" transform="rotate(-15,74,38)"/>
-                        <!-- diamonds top arc -->
-                        <polygon points="80,27 82,32 80,37 78,32" fill="white" opacity="0.9"/>
-                        <polygon points="94,31 96,36 94,41 92,36" fill="white" opacity="0.8"/>
-                        <polygon points="66,31 68,36 66,41 64,36" fill="white" opacity="0.8"/>
-                        <!-- engraving -->
-                        <path d="M44,65 Q44,90 80,90 Q116,90 116,65" fill="none" stroke="#f5d060" stroke-width="0.6" opacity="0.3"/>
-                        <!-- side sheen -->
-                        <path d="M43,56 Q56,48 68,50" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.35"/>
-                        <!-- shadow ellipse -->
-                        <ellipse cx="80" cy="92" rx="36" ry="9" fill="#5a3f00" opacity="0.15"/>
+                    <g transform="translate(192,16) scale(-1,1)" opacity="0.68">
+                        <path d="M0,0 C-7,-9 -16,-5 -11,2 C-6,9 -2,5 0,0Z" fill="#f0d060"/>
+                        <path d="M0,0 C7,-9 16,-5 11,2 C6,9 2,5 0,0Z" fill="#c9a227"/>
                     </g>
 
-                    <!-- RIGHT RING — tilted +15deg, overlaps left at center -->
-                    <g id="wrr" filter="url(#ringShadow)" transform="rotate(12,140,65)">
-                        <circle cx="140" cy="65" r="38" fill="url(#wG2)"/>
-                        <circle cx="140" cy="65" r="26" fill="url(#wI2)"/>
-                        <path d="M102,65 Q102,92 140,92 Q178,92 178,65" fill="url(#wG2)" opacity="0.7"/>
-                        <path d="M114,65 Q114,84 140,84 Q166,84 166,65" fill="url(#wI2)" opacity="0.85"/>
-                        <ellipse cx="125" cy="43" rx="10" ry="5" fill="white" opacity="0.5" transform="rotate(-25,125,43)"/>
-                        <ellipse cx="134" cy="38" rx="6" ry="3" fill="white" opacity="0.45" transform="rotate(-15,134,38)"/>
-                        <!-- solitaire diamond -->
-                        <g transform="translate(140,27)">
-                            <polygon points="0,-9 7,-3 0,8 -7,-3" fill="#e8f8ff" opacity="0.96"/>
-                            <polygon points="0,-9 7,-3 0,0" fill="white" opacity="0.92"/>
-                            <polygon points="0,8 7,-3 0,0" fill="#b8e8f8" opacity="0.8"/>
-                            <polygon points="0,8 -7,-3 0,0" fill="#d0f0ff" opacity="0.72"/>
-                            <line x1="-7" y1="-3" x2="7" y2="-3" stroke="white" stroke-width="0.5" opacity="0.6"/>
+                    <!-- ══ LEFT RING — tilted perspective torus ══ -->
+                    <!-- Ring viewed at ~65° tilt: outer shape is an ellipse, band is thick -->
+                    <g id="wrl" filter="url(#rShadow)">
+                        <!-- Ground shadow -->
+                        <ellipse cx="82" cy="128" rx="48" ry="8" fill="url(#shadowG)"/>
+                        <!-- Bottom tube half (drawn under) -->
+                        <ellipse cx="82" cy="80" rx="44" ry="18" fill="url(#tubeG)" opacity="0.9"/>
+                        <!-- Main ring face -->
+                        <ellipse cx="82" cy="72" rx="44" ry="18" fill="url(#tubeG)"/>
+                        <!-- Ivory hole -->
+                        <ellipse cx="82" cy="72" rx="30" ry="11" fill="url(#holeG)"/>
+                        <!-- Bottom tube inner -->
+                        <ellipse cx="82" cy="80" rx="30" ry="11" fill="url(#holeG)" opacity="0.8"/>
+                        <!-- Top specular highlight -->
+                        <ellipse cx="70" cy="62" rx="14" ry="5" fill="url(#specG)" opacity="0.85" transform="rotate(-8,70,62)"/>
+                        <ellipse cx="82" cy="58" rx="8" ry="3" fill="white" opacity="0.5"/>
+                        <!-- Diamond accents on top arc -->
+                        <polygon points="82,54 84,58 82,62 80,58" fill="white" opacity="0.95"/>
+                        <polygon points="100,58 102,62 100,66 98,62" fill="white" opacity="0.8" transform="rotate(15,100,62)"/>
+                        <polygon points="64,58 66,62 64,66 62,62" fill="white" opacity="0.8" transform="rotate(-15,64,62)"/>
+                        <!-- Gold rim highlight -->
+                        <ellipse cx="82" cy="72" rx="44" ry="18" fill="none" stroke="rgba(255,240,120,0.5)" stroke-width="1.5"/>
+                        <!-- Inner rim -->
+                        <ellipse cx="82" cy="72" rx="30" ry="11" fill="none" stroke="rgba(200,160,40,0.3)" stroke-width="0.8"/>
+                    </g>
+
+                    <!-- ══ RIGHT RING — tilted opposite, overlapping ══ -->
+                    <g id="wrr" filter="url(#rShadow)">
+                        <!-- Ground shadow -->
+                        <ellipse cx="158" cy="128" rx="48" ry="8" fill="url(#shadowG)"/>
+                        <!-- Bottom tube half -->
+                        <ellipse cx="158" cy="80" rx="44" ry="18" fill="url(#tubeG)" opacity="0.9"/>
+                        <!-- Main ring face -->
+                        <ellipse cx="158" cy="72" rx="44" ry="18" fill="url(#tubeG)"/>
+                        <!-- Ivory hole -->
+                        <ellipse cx="158" cy="72" rx="30" ry="11" fill="url(#holeG)"/>
+                        <!-- Bottom tube inner -->
+                        <ellipse cx="158" cy="80" rx="30" ry="11" fill="url(#holeG)" opacity="0.8"/>
+                        <!-- Specular -->
+                        <ellipse cx="146" cy="62" rx="14" ry="5" fill="url(#specG)" opacity="0.85" transform="rotate(-8,146,62)"/>
+                        <ellipse cx="158" cy="58" rx="8" ry="3" fill="white" opacity="0.5"/>
+                        <!-- SOLITAIRE DIAMOND — big sparkly -->
+                        <g transform="translate(158,45)">
+                            <polygon points="0,-12 9,-4 0,10 -9,-4" fill="#e8f8ff" opacity="0.97"/>
+                            <polygon points="0,-12 9,-4 0,0" fill="white" opacity="0.95"/>
+                            <polygon points="0,10 9,-4 0,0" fill="#a8d8f0" opacity="0.82"/>
+                            <polygon points="0,10 -9,-4 0,0" fill="#c8ecff" opacity="0.78"/>
+                            <line x1="-9" y1="-4" x2="9" y2="-4" stroke="white" stroke-width="0.7" opacity="0.7"/>
+                            <!-- sparkle rays -->
+                            <line x1="0" y1="-16" x2="0" y2="-12" stroke="white" stroke-width="1" opacity="0.8"/>
+                            <line x1="12" y1="-8" x2="9" y2="-4" stroke="white" stroke-width="1" opacity="0.7"/>
+                            <line x1="-12" y1="-8" x2="-9" y2="-4" stroke="white" stroke-width="1" opacity="0.7"/>
                         </g>
-                        <polygon points="154,31 156,36 154,41 152,36" fill="white" opacity="0.8"/>
-                        <polygon points="126,31 128,36 126,41 124,36" fill="white" opacity="0.8"/>
-                        <path d="M104,65 Q104,90 140,90 Q176,90 176,65" fill="none" stroke="#f5d060" stroke-width="0.6" opacity="0.3"/>
-                        <path d="M103,56 Q116,48 128,50" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.35"/>
-                        <ellipse cx="140" cy="92" rx="36" ry="9" fill="#5a3f00" opacity="0.15"/>
+                        <!-- Gold rim -->
+                        <ellipse cx="158" cy="72" rx="44" ry="18" fill="none" stroke="rgba(255,240,120,0.5)" stroke-width="1.5"/>
+                        <ellipse cx="158" cy="72" rx="30" ry="11" fill="none" stroke="rgba(200,160,40,0.3)" stroke-width="0.8"/>
                     </g>
 
-                    <!-- Center glow where rings meet -->
-                    <radialGradient id="meetGlow" cx="50%" cy="50%" r="50%">
-                        <stop offset="0%" stop-color="#ffe080" stop-opacity="0.7"/>
+                    <!-- Center join glow where rings overlap -->
+                    <radialGradient id="joinGlow" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" stop-color="#ffe080" stop-opacity="0.65"/>
                         <stop offset="100%" stop-color="#ffe080" stop-opacity="0"/>
                     </radialGradient>
-                    <ellipse cx="110" cy="68" rx="14" ry="18" fill="url(#meetGlow)"/>
+                    <ellipse cx="120" cy="74" rx="16" ry="10" fill="url(#joinGlow)"/>
 
                     <style>
-                        #wrl { animation: wring-tilt-l 3.5s ease-in-out infinite; transform-origin: 80px 65px; }
-                        #wrr { animation: wring-tilt-r 3.5s ease-in-out infinite; transform-origin: 140px 65px; }
-                        @keyframes wring-tilt-l {
-                            0%,100% { transform: rotate(-12deg) translateY(0px); }
-                            50% { transform: rotate(-10deg) translateY(-4px); }
+                        #wrl { animation: wring-bob-l 3.8s ease-in-out infinite; }
+                        #wrr { animation: wring-bob-r 3.8s ease-in-out infinite; }
+                        @keyframes wring-bob-l {
+                            0%,100% { transform: translateY(0px) rotate(0deg); }
+                            50% { transform: translateY(-5px) rotate(1.5deg); }
                         }
-                        @keyframes wring-tilt-r {
-                            0%,100% { transform: rotate(12deg) translateY(0px); }
-                            50% { transform: rotate(10deg) translateY(-4px); }
+                        @keyframes wring-bob-r {
+                            0%,100% { transform: translateY(0px) rotate(0deg); }
+                            50% { transform: translateY(-4px) rotate(-1.5deg); }
                         }
                     </style>
                 </svg>
@@ -1004,9 +1016,9 @@
 
                 <div class="info-block">
                     <p class="info-label" id="where-label">Qayerda?</p>
-                    <p class="info-value">"Visol"</p>
+                    <p class="info-value">"Visol bazmgohi"</p>
                     <p class="info-sub">Samarqand viloyati, Chelak shahri</p>
-                    <a href="https://yandex.uz/web-maps/-/CPS7vG6r" target="_blank" class="btn-map" id="map-btn">Xaritada ochish</a>
+                    <a href="https://maps.app.goo.gl/DFhXY94HZXnbhuqj9" target="_blank" class="btn-map" id="map-btn">Xaritada ochish</a>
                 </div>
             </div>
         </section>
@@ -1071,10 +1083,14 @@ function setLang(lang) {
     document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
     const L = LANGS[lang];
 
-    // Guest name from URL
-    const guestList = {"1":"Kursdo'shlarim","2":"Yangaposhsho","3":"Umid aka va oilasi","4":"Doniyor","5":"Madina"};
+    // Guest names per language
+    const guestNames = {
+        uz: {"1":"Hotinjon","2":"Yangaposhsho","3":"Umid aka va oilasi","4":"Doniyor","5":"Madina"},
+        ru: {"1":"Хотинжон","2":"Янгапошшо","3":"Умид ака и семья","4":"Дониёр","5":"Мадина"}
+    };
     const gId = new URLSearchParams(window.location.search).get('id');
-    const gName = gId && guestList[gId] ? guestList[gId] : null;
+    const names = guestNames[lang] || guestNames['uz'];
+    const gName = gId && names[gId] ? names[gId] : null;
 
     document.getElementById('welcome-title').textContent = gName ? `${L.guestPrefix} ${gName}!` : L.welcomeTitle;
     document.getElementById('welcome-sub').textContent = L.welcomeSub;
