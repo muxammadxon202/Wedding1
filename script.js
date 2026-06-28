@@ -81,7 +81,7 @@ function setLang(lang) {
         uz: {
             "1":"Hotinjon","2":"Zuhriddin","3":"Obbbooosss","4":"Qori ota",
             "5":"Otabek","6":"Aslbek","7":"Sherzod","8":"Sardor","9":"Farrux",
-            "10":"Hazem","11":"Nadejda","12":"Nina","13":"Dilyara","14":"Veronika",
+            "10":"Hazem","11":"Nadejda","12":"Hotinjon","13":"Dilyara","14":"Veronika",
             "15":"Tyotya Kseniya","16":"Yulya","17":"Aleksandr","18":"Polina"
         },
         ru: {
@@ -181,7 +181,7 @@ const guestList = {
     "9":  "Farrux",
     "10": "Hazem",
     "11": "Nadejda",
-    "12": "Nina",
+    "12": "Hotinjon",
     "13": "Dilyara",
     "14": "Veronika",
     "15": "Tyotya Kseniya",
