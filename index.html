@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Muhammadxon & Zilolaxon — To'yga taklif</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<audio id="bgMusic" loop><source src="2.mp3" type="audio/mpeg"></audio>
+<audio id="ringSound"><source src="ring_bell.wav" type="audio/wav"></audio>
+
+<!-- Language bar -->
+<div id="lang-bar">
+    <button class="lang-btn active" onclick="setLang('uz')">O'Z</button>
+    <button class="lang-btn" onclick="setLang('ru')">RU</button>
+</div>
+
+<!-- Music button -->
+<button id="music-btn" onclick="toggleMusic()" title="Musiqa">
+    <svg class="note-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 18V5l12-2v13" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="6" cy="18" r="3" fill="white"/>
+        <circle cx="18" cy="16" r="3" fill="white"/>
+    </svg>
+</button>
+
+<div id="app">
+    <canvas id="sakura-canvas"></canvas>
+
+    <!-- Gold frame -->
+    <div class="frame-border">
+        <svg class="frame-svg" viewBox="0 0 400 860" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+            <defs>
+                <linearGradient id="gG" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#f5d97a"/>
+                    <stop offset="50%" style="stop-color:#c9a227"/>
+                    <stop offset="100%" style="stop-color:#8a6500"/>
+                </linearGradient>
+                <linearGradient id="gV" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:#f0d060;stop-opacity:0.9"/>
+                    <stop offset="50%" style="stop-color:#c9a227;stop-opacity:0.7"/>
+                    <stop offset="100%" style="stop-color:#8a6500;stop-opacity:0.4"/>
+                </linearGradient>
+            </defs>
+
+            <!-- Outer border lines -->
+            <rect x="8" y="8" width="384" height="844" rx="18" ry="18" fill="none" stroke="url(#gG)" stroke-width="1.8" opacity="0.7"/>
+            <rect x="14" y="14" width="372" height="832" rx="14" ry="14" fill="none" stroke="url(#gG)" stroke-width="0.7" opacity="0.35"/>
+
+            <!-- LEFT VINE COLUMN -->
+            <g opacity="0.82">
+                <!-- Main vine stem -->
+                <path d="M22,30 C18,80 28,130 20,180 C14,230 26,280 18,340 C12,400 26,450 20,510 C14,570 24,620 18,680 C12,730 22,780 20,830"
+                      fill="none" stroke="#c9a227" stroke-width="1.4" stroke-linecap="round" opacity="0.6"/>
+                <!-- Curling tendrils left -->
+                <path d="M20,80 C10,70 4,60 8,52" fill="none" stroke="#c9a227" stroke-width="0.9" opacity="0.55"/>
+                <path d="M19,160 C8,150 3,138 7,128" fill="none" stroke="#c9a227" stroke-width="0.9" opacity="0.5"/>
+                <path d="M20,260 C9,248 4,235 9,225" fill="none" stroke="#c9a227" stroke-width="0.9" opacity="0.55"/>
+                <path d="M19,360 C8,348 2,335 8,324" fill="none" stroke="#c9a227" stroke-width="0.9" opacity="0.5"/>
+                <path d="M20,460 C9,448 4,436 9,425" fill="none" stroke="#c9a227" stroke-width="0.9" opacity="0.55"/>
+                <path d="M19,560 C7,548 2,535 8,523" fill="none" stroke="#c9a227" stroke-width="0.9" opacity="0.5"/>
+                <path d="M20,660 C9,648 4,636 9,624" fill="none" stroke="#c9a227" stroke-width="0.9" opacity="0.55"/>
+                <path d="M19,760 C7,748 2,736 8,724" fill="none" stroke="#c9a227" stroke-width="0.9" opacity="0.5"/>
+                <!-- Leaves branching right -->
+                <path d="M20,100 C28,90 35,92 30,102 C25,112 18,108 20,100Z" fill="#c9a227" opacity="0.5"/>
+                <path d="M19,200 C28,188 36,192 31,202 C25,213 17,208 19,200Z" fill="#c9a227" opacity="0.45"/>
+                <path d="M20,300 C29,288 37,292 32,303 C26,314 18,308 20,300Z" fill="#c9a227" opacity="0.5"/>
+                <path d="M19,400 C28,388 36,392 31,402 C25,413 17,408 19,400Z" fill="#c9a227" opacity="0.45"/>
+                <path d="M20,500 C29,488 37,492 32,503 C26,514 18,508 20,500Z" fill="#c9a227" opacity="0.5"/>
+                <path d="M19,600 C28,588 36,592 31,602 C25,613 17,608 19,600Z" fill="#c9a227" opacity="0.45"/>
+                <path d="M20,700 C29,688 37,692 32,703 C26,714 18,708 20,700Z" fill="#c9a227" opacity="0.5"/>
+                <path d="M19,800 C28,788 36,792 31,802 C25,813 17,808 19,800Z" fill="#c9a227" opacity="0.45"/>
+
+                <!-- Sakura blooms left side -->
+                <!-- bloom at y=130 -->
+                <g transform="translate(24,130)">
+                    <circle cx="0" cy="-7" r="4" fill="#ffb3cc" opacity="0.85"/>
+                    <circle cx="6.7" cy="-2.2" r="4" fill="#ffb3cc" opacity="0.8"/>
+                    <circle cx="4.1" cy="6" r="4" fill="#ffc8d8" opacity="0.8"/>
+                    <circle cx="-4.1" cy="6" r="4" fill="#ffb3cc" opacity="0.82"/>
+                    <circle cx="-6.7" cy="-2.2" r="4" fill="#ffc8d8" opacity="0.78"/>
+                    <circle cx="0" cy="0" r="2.8" fill="#ffe0a0" opacity="0.95"/>
+                    <circle cx="0" cy="0" r="1.4" fill="#f5b800" opacity="1"/>
+                </g>
+                <!-- bloom at y=320 -->
+                <g transform="translate(24,320)">
+                    <circle cx="0" cy="-6" r="3.5" fill="#ffd0e0" opacity="0.8"/>
+                    <circle cx="5.7" cy="-1.9" r="3.5" fill="#ffb3cc" opacity="0.78"/>
+                    <circle cx="3.5" cy="5.2" r="3.5" fill="#ffc8d8" opacity="0.8"/>
+                    <circle cx="-3.5" cy="5.2" r="3.5" fill="#ffb3cc" opacity="0.78"/>
+                    <circle cx="-5.7" cy="-1.9" r="3.5" fill="#ffd0e0" opacity="0.75"/>
+                    <circle cx="0" cy="0" r="2.5" fill="#ffe0a0" opacity="0.95"/>
+                    <circle cx="0" cy="0" r="1.2" fill="#f5b800" opacity="1"/>
+                </g>
+                <!-- bloom at y=520 -->
+                <g transform="translate(24,520)">
+                    <circle cx="0" cy="-7" r="4" fill="#ffb3cc" opacity="0.85"/>
+                    <circle cx="6.7" cy="-2.2" r="4" fill="#ffd0e0" opacity="0.8"/>
+                    <circle cx="4.1" cy="6" r="4" fill="#ffb3cc" opacity="0.82"/>
+                    <circle cx="-4.1" cy="6" r="4" fill="#ffc8d8" opacity="0.8"/>
+                    <circle cx="-6.7" cy="-2.2" r="4" fill="#ffb3cc" opacity="0.78"/>
+                    <circle cx="0" cy="0" r="2.8" fill="#ffe0a0" opacity="0.95"/>
+                    <circle cx="0" cy="0" r="1.4" fill="#f5b800" opacity="1"/>
+                </g>
+                <!-- bloom at y=720 -->
+                <g transform="translate(24,720)">
+                    <circle cx="0" cy="-6" r="3.5" fill="#ffd0e0" opacity="0.8"/>
+                    <circle cx="5.7" cy="-1.9" r="3.5" fill="#ffb3cc" opacity="0.78"/>
+                    <circle cx="3.5" cy="5.2" r="3.5" fill="#ffc8d8" opacity="0.8"/>
+                    <circle cx="-3.5" cy="5.2" r="3.5" fill="#ffb3cc" opacity="0.78"/>
+                    <circle cx="-5.7" cy="-1.9" r="3.5" fill="#ffd0e0" opacity="0.75"/>
+                    <circle cx="0" cy="0" r="2.5" fill="#ffe0a0" opacity="0.95"/>
+                    <circle cx="0" cy="0" r="1.2" fill="#f5b800" opacity="1"/>
+                </g>
+                <!-- Daisy left y=230 -->
+                <g transform="translate(22,230)">
+                    <ellipse cx="0" cy="-6" rx="2.5" ry="5" fill="white" opacity="0.92"/>
+                    <ellipse cx="0" cy="-6" rx="2.5" ry="5" fill="white" opacity="0.92" transform="rotate(45,0,0)"/>
+                    <ellipse cx="0" cy="-6" rx="2.5" ry="5" fill="white" opacity="0.92" transform="rotate(90,0,0)"/>
+                    <ellipse cx="0" cy="-6" rx="2.5" ry="5" fill="white" opacity="0.92" transform="rotate(135,0,0)"/>
+                    <ellipse cx="0" cy="-6" rx="2.5" ry="5" fill="white" opacity="0.92" transform="rotate(180,0,0)"/>
+                    <ellipse cx="0" cy="-6" rx="2.5" ry="5" fill="white" opacity="0.92" transform="rotate(225,0,0)"/>
+                    <ellipse cx="0" cy="-6" rx="2.5" ry="5" fill="white" opacity="0.92" transform="rotate(270,0,0)"/>
+                    <ellipse cx="0" cy="-6" rx="2.5" ry="5" fill="white" opacity="0.92" transform="rotate(315,0,0)"/>
+                    <circle cx="0" cy="0" r="3.5" fill="#f5c500" opacity="0.98"/>
+                    <circle cx="0" cy="0" r="2" fill="#e0a800" opacity="0.9"/>
+                </g>
+                <!-- Daisy left y=630 -->
+                <g transform="translate(22,630)">
+                    <ellipse cx="0" cy="-6" rx="2.5" ry="5" fill="white" opacity="0.9"/>
+                    <ellipse cx="0" cy="-6" rx="2.5" ry="5" fill="white" opacity="0.9" transform="rotate(45,0,0)"/>
+                    <ellipse cx="0" cy="-6" rx="2.5" ry="5" fill="white" opacity="0.9" transform="rotate(90,0,0)"/>
+                    <ellipse cx="0" cy="-6" rx="2.5" ry="5" fill="white" opacity="0.9" transform="rotate(135,0,0)"/>
+                    <ellipse cx="0" cy="-6" rx="2.5" ry="5" fill="white" opacity="0.9" transform="rotate(180,0,0)"/>
+                    <ellipse cx="0" cy="-6" rx="2.5" ry="5" fill="white" opacity="0.9" transform="rotate(225,0,0)"/>
+                    <ellipse cx="0" cy="-6" rx="2.5" ry="5" fill="white" opacity="0.9" transform="rotate(270,0,0)"/>
+                    <ellipse cx="0" cy="-6" rx="2.5" ry="5" fill="white" opacity="0.9" transform="rotate(315,0,0)"/>
+                    <circle cx="0" cy="0" r="3.5" fill="#f5c500" opacity="0.98"/>
+                    <circle cx="0" cy="0" r="2" fill="#e0a800" opacity="0.9"/>
+                </g>
+            </g>
+
+            <!-- RIGHT VINE COLUMN (mirrored) -->
+            <g opacity="0.82" transform="translate(400,0) scale(-1,1)">
+                <path d="M22,30 C18,80 28,130 20,180 C14,230 26,280 18,340 C12,400 26,450 20,510 C14,570 24,620 18,680 C12,730 22,780 20,830"
+                      fill="none" stroke="#c9a227" stroke-width="1.4" stroke-linecap="round" opacity="0.6"/>
+                <path d="M20,80 C10,70 4,60 8,52" fill="none" stroke="#c9a227" stroke-width="0.9" opacity="0.55"/>
+                <path d="M19,160 C8,150 3,138 7,128" fill="none" stroke="#c9a227" stroke-width="0.9" opacity="0.5"/>
+                <path d="M20,260 C9,248 4,235 9,225" fill="none" stroke="#c9a227" stroke-width="0.9" opacity="0.55"/>
+                <path d="M19,360 C8,348 2,335 8,324" fill="none" stroke="#c9a227" stroke-width="0.9" opacity="0.5"/>
+                <path d="M20,460 C9,448 4,436 9,425" fill="none" stroke="#c9a227" stroke-width="0.9" opacity="0.55"/>
+                <path d="M19,560 C7,548 2,535 8,523" fill="none" stroke="#c9a227" stroke-width="0.9" opacity="0.5"/>
+                <path d="M20,660 C9,648 4,636 9,624" fill="none" stroke="#c9a227" stroke-width="0.9" opacity="0.55"/>
+                <path d="M19,760 C7,748 2,736 8,724" fill="none" stroke="#c9a227" stroke-width="0.9" opacity="0.5"/>
+                <path d="M20,100 C28,90 35,92 30,102 C25,112 18,108 20,100Z" fill="#c9a227" opacity="0.5"/>
+                <path d="M19,200 C28,188 36,192 31,202 C25,213 17,208 19,200Z" fill="#c9a227" opacity="0.45"/>
+                <path d="M20,300 C29,288 37,292 32,303 C26,314 18,308 20,300Z" fill="#c9a227" opacity="0.5"/>
+                <path d="M19,400 C28,388 36,392 31,402 C25,413 17,408 19,400Z" fill="#c9a227" opacity="0.45"/>
+                <path d="M20,500 C29,488 37,492 32,503 C26,514 18,508 20,500Z" fill="#c9a227" opacity="0.5"/>
+                <path d="M19,600 C28,588 36,592 31,602 C25,613 17,608 19,600Z" fill="#c9a227" opacity="0.45"/>
+                <path d="M20,700 C29,688 37,692 32,703 C26,714 18,708 20,700Z" fill="#c9a227" opacity="0.5"/>
+                <path d="M19,800 C28,788 36,792 31,802 C25,813 17,808 19,800Z" fill="#c9a227" opacity="0.45"/>
+                <g transform="translate(24,130)">
+                    <circle cx="0" cy="-7" r="4" fill="#ffb3cc" opacity="0.85"/>
+                    <circle cx="6.7" cy="-2.2" r="4" fill="#ffb3cc" opacity="0.8"/>
+                    <circle cx="4.1" cy="6" r="4" fill="#ffc8d8" opacity="0.8"/>
+                    <circle cx="-4.1" cy="6" r="4" fill="#ffb3cc" opacity="0.82"/>
+                    <circle cx="-6.7" cy="-2.2" r="4" fill="#ffc8d8" opacity="0.78"/>
+                    <circle cx="0" cy="0" r="2.8" fill="#ffe0a0" opacity="0.95"/>
+                    <circle cx="0" cy="0" r="1.4" fill="#f5b800" opacity="1"/>
+                </g>
+                <g transform="translate(24,320)">
+                    <circle cx="0" cy="-6" r="3.5" fill="#ffd0e0" opacity="0.8"/>
+                    <circle cx="5.7" cy="-1.9" r="3.5" fill="#ffb3cc" opacity="0.78"/>
+                    <circle cx="3.5" cy="5.2" r="3.5" fill="#ffc8d8" opacity="0.8"/>
+                    <circle cx="-3.5" cy="5.2" r="3.5" fill="#ffb3cc" opacity="0.78"/>
+                    <circle cx="-5.7" cy="-1.9" r="3.5" fill="#ffd0e0" opacity="0.75"/>
+                    <circle cx="0" cy="0" r="2.5" fill="#ffe0a0" opacity="0.95"/>
+                    <circle cx="0" cy="0" r="1.2" fill="#f5b800" opacity="1"/>
+                </g>
+                <g transform="translate(24,520)">
+                    <circle cx="0" cy="-7" r="4" fill="#ffb3cc" opacity="0.85"/>
+                    <circle cx="6.7" cy="-2.2" r="4" fill="#ffd0e0" opacity="0.8"/>
+                    <circle cx="4.1" cy="6" r="4" fill="#ffb3cc" opacity="0.82"/>
+                    <circle cx="-4.1" cy="6" r="4" fill="#ffc8d8" opacity="0.8"/>
+                    <circle cx="-6.7" cy="-2.2" r="4" fill="#ffb3cc" opacity="0.78"/>
+                    <circle cx="0" cy="0" r="2.8" fill="#ffe0a0" opacity="0.95"/>
+                    <circle cx="0" cy="0" r="1.4" fill="#f5b800" opacity="1"/>
+                </g>
+                <g transform="translate(24,720)">
+                    <circle cx="0" cy="-6" r="3.5" fill="#ffd0e0" opacity="0.8"/>
+                    <circle cx="5.7" cy="-1.9" r="3.5" fill="#ffb3cc" opacity="0.78"/>
+                    <circle cx="3.5" cy="5.2" r="3.5" fill="#ffc8d8" opacity="0.8"/>
+                    <circle cx="-3.5" cy="5.2" r="3.5" fill="#ffb3cc" opacity="0.78"/>
+                    <circle cx="-5.7" cy="-1.9" r="3.5" fill="#ffd0e0" opacity="0.75"/>
+                    <circle cx="0" cy="0" r="2.5" fill="#ffe0a0" opacity="0.95"/>
+                    <circle cx="0" cy="0" r="1.2" fill="#f5b800" opacity="1"/>
+                </g>
+                <g transform="translate(22,230)">
+                    <ellipse cx="0" cy="-6" rx="2.5" ry="5" fill="white" opacity="0.92"/>
+                    <ellipse cx="0" cy="-6" rx="2.5" ry="5" fill="white" opacity="0.92" transform="rotate(45,0,0)"/>
+                    <ellipse cx="0" cy="-6" rx="2.5" ry="5" fill="white" opacity="0.92" transform="rotate(90,0,0)"/>
+                    <ellipse cx="0" cy="-6" rx="2.5" ry="5" fill="white" opacity="0.92" transform="rotate(135,0,0)"/>
+                    <ellipse cx="0" cy="-6" rx="2.5" ry="5" fill="white" opacity="0.92" transform="rotate(180,0,0)"/>
+                    <ellipse cx="0" cy="-6" rx="2.5" ry="5" fill="white" opacity="0.92" transform="rotate(225,0,0)"/>
+                    <ellipse cx="0" cy="-6" rx="2.5" ry="5" fill="white" opacity="0.92" transform="rotate(270,0,0)"/>
+                    <ellipse cx="0" cy="-6" rx="2.5" ry="5" fill="white" opacity="0.92" transform="rotate(315,0,0)"/>
+                    <circle cx="0" cy="0" r="3.5" fill="#f5c500" opacity="0.98"/>
+                    <circle cx="0" cy="0" r="2" fill="#e0a800" opacity="0.9"/>
+                </g>
+                <g transform="translate(22,630)">
+                    <ellipse cx="0" cy="-6" rx="2.5" ry="5" fill="white" opacity="0.9"/>
+                    <ellipse cx="0" cy="-6" rx="2.5" ry="5" fill="white" opacity="0.9" transform="rotate(45,0,0)"/>
+                    <ellipse cx="0" cy="-6" rx="2.5" ry="5" fill="white" opacity="0.9" transform="rotate(90,0,0)"/>
+                    <ellipse cx="0" cy="-6" rx="2.5" ry="5" fill="white" opacity="0.9" transform="rotate(135,0,0)"/>
+                    <ellipse cx="0" cy="-6" rx="2.5" ry="5" fill="white" opacity="0.9" transform="rotate(180,0,0)"/>
+                    <ellipse cx="0" cy="-6" rx="2.5" ry="5" fill="white" opacity="0.9" transform="rotate(225,0,0)"/>
+                    <ellipse cx="0" cy="-6" rx="2.5" ry="5" fill="white" opacity="0.9" transform="rotate(270,0,0)"/>
+                    <ellipse cx="0" cy="-6" rx="2.5" ry="5" fill="white" opacity="0.9" transform="rotate(315,0,0)"/>
+                    <circle cx="0" cy="0" r="3.5" fill="#f5c500" opacity="0.98"/>
+                    <circle cx="0" cy="0" r="2" fill="#e0a800" opacity="0.9"/>
+                </g>
+            </g>
+
+            <!-- Corner ornaments -->
+            <g opacity="0.88">
+                <g transform="translate(16,16)"><circle cx="9" cy="9" r="5.5" fill="#f0d060"/><g fill="white" opacity="0.85"><ellipse cx="9" cy="1" rx="3" ry="6" transform="rotate(0,9,9)"/><ellipse cx="9" cy="1" rx="3" ry="6" transform="rotate(45,9,9)"/><ellipse cx="9" cy="1" rx="3" ry="6" transform="rotate(90,9,9)"/><ellipse cx="9" cy="1" rx="3" ry="6" transform="rotate(135,9,9)"/><ellipse cx="9" cy="1" rx="3" ry="6" transform="rotate(180,9,9)"/><ellipse cx="9" cy="1" rx="3" ry="6" transform="rotate(225,9,9)"/><ellipse cx="9" cy="1" rx="3" ry="6" transform="rotate(270,9,9)"/><ellipse cx="9" cy="1" rx="3" ry="6" transform="rotate(315,9,9)"/></g><circle cx="9" cy="9" r="3.5" fill="#c9a227"/><circle cx="9" cy="9" r="1.5" fill="#f5e080"/></g>
+                <g transform="translate(363,16)"><circle cx="9" cy="9" r="5.5" fill="#f0d060"/><g fill="white" opacity="0.85"><ellipse cx="9" cy="1" rx="3" ry="6" transform="rotate(0,9,9)"/><ellipse cx="9" cy="1" rx="3" ry="6" transform="rotate(45,9,9)"/><ellipse cx="9" cy="1" rx="3" ry="6" transform="rotate(90,9,9)"/><ellipse cx="9" cy="1" rx="3" ry="6" transform="rotate(135,9,9)"/><ellipse cx="9" cy="1" rx="3" ry="6" transform="rotate(180,9,9)"/><ellipse cx="9" cy="1" rx="3" ry="6" transform="rotate(225,9,9)"/><ellipse cx="9" cy="1" rx="3" ry="6" transform="rotate(270,9,9)"/><ellipse cx="9" cy="1" rx="3" ry="6" transform="rotate(315,9,9)"/></g><circle cx="9" cy="9" r="3.5" fill="#c9a227"/><circle cx="9" cy="9" r="1.5" fill="#f5e080"/></g>
+                <g transform="translate(16,823)"><circle cx="9" cy="9" r="5.5" fill="#f0d060"/><g fill="white" opacity="0.85"><ellipse cx="9" cy="1" rx="3" ry="6" transform="rotate(0,9,9)"/><ellipse cx="9" cy="1" rx="3" ry="6" transform="rotate(45,9,9)"/><ellipse cx="9" cy="1" rx="3" ry="6" transform="rotate(90,9,9)"/><ellipse cx="9" cy="1" rx="3" ry="6" transform="rotate(135,9,9)"/><ellipse cx="9" cy="1" rx="3" ry="6" transform="rotate(180,9,9)"/><ellipse cx="9" cy="1" rx="3" ry="6" transform="rotate(225,9,9)"/><ellipse cx="9" cy="1" rx="3" ry="6" transform="rotate(270,9,9)"/><ellipse cx="9" cy="1" rx="3" ry="6" transform="rotate(315,9,9)"/></g><circle cx="9" cy="9" r="3.5" fill="#c9a227"/><circle cx="9" cy="9" r="1.5" fill="#f5e080"/></g>
+                <g transform="translate(363,823)"><circle cx="9" cy="9" r="5.5" fill="#f0d060"/><g fill="white" opacity="0.85"><ellipse cx="9" cy="1" rx="3" ry="6" transform="rotate(0,9,9)"/><ellipse cx="9" cy="1" rx="3" ry="6" transform="rotate(45,9,9)"/><ellipse cx="9" cy="1" rx="3" ry="6" transform="rotate(90,9,9)"/><ellipse cx="9" cy="1" rx="3" ry="6" transform="rotate(135,9,9)"/><ellipse cx="9" cy="1" rx="3" ry="6" transform="rotate(180,9,9)"/><ellipse cx="9" cy="1" rx="3" ry="6" transform="rotate(225,9,9)"/><ellipse cx="9" cy="1" rx="3" ry="6" transform="rotate(270,9,9)"/><ellipse cx="9" cy="1" rx="3" ry="6" transform="rotate(315,9,9)"/></g><circle cx="9" cy="9" r="3.5" fill="#c9a227"/><circle cx="9" cy="9" r="1.5" fill="#f5e080"/></g>
+            </g>
+        </svg>
+    </div>
+
+    <!-- Ring animation canvas -->
+    <canvas id="ring-canvas-overlay"></canvas>
+
+    <!-- Welcome screen -->
+    <div id="welcome-screen">
+        <div class="welcome-card">
+            <!-- Interlocked 3D rings on welcome -->
+            <div class="welcome-rings" style="margin-bottom:16px">
+                <canvas id="welcome-ring-canvas" width="260" height="150" style="display:block;margin:0 auto;"></canvas>
+            </div>
+            <h2 id="welcome-title">Hurmatli mehmon!</h2>
+            <p id="welcome-sub">Bizni hayotimizdagi eng go'zal kunga taklif etamiz</p>
+            <button id="startBtn" onclick="openInvitation()">
+                <span id="start-btn-text">Taklifnomani ochish</span>
+                <span class="btn-butterfly">🦋</span>
+            </button>
+
+            <!-- Timer on welcome screen -->
+            <div id="welcome-countdown">
+                <div class="wc-item"><span id="w-days">00</span><p>КУН</p></div>
+                <div class="wc-item"><span id="w-hours">00</span><p>СОАТ</p></div>
+                <div class="wc-item"><span id="w-minutes">00</span><p>ДАҚИҚА</p></div>
+                <div class="wc-item"><span id="w-seconds">00</span><p>СОНИЯ</p></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <main id="main-content" class="hidden">
+        <section class="hero">
+            <p class="hero-subtitle" id="hero-sub">Biz turmush quryapmiz</p>
+            <h1 class="hero-names">
+                Muhammadxon<br>
+                <span class="hero-and">&</span><br>
+                Zilolaxon
+            </h1>
+            <p class="hero-date">03 . 08 . 2026</p>
+        </section>
+
+        <section class="section fade-in">
+            <div class="card">
+                <h2 class="section-title" id="card-title">Aziz mehmonlar!</h2>
+                <p class="text-main" id="card-text">
+                    Hayotimizdagi eng quvonchli va unutilmas kunda — Nikoh to'yimiz shod-iyonasida sizni ko'rishdan cheksiz mamnun bo'lamiz. Sizning tashrifingiz bayramimizni yanada fayzli qiladi!
+                </p>
+            </div>
+        </section>
+
+        <section class="section fade-in" style="padding-top:0">
+            <div class="toy-card">
+                <img class="toy-flower toy-flower-top" src="flower-bottom-clean.png" alt="">
+
+                <h2 class="toy-card-title" id="toy-title">To'y haqida</h2>
+
+                <p class="toy-label" id="owners-label">To'y egalari:</p>
+                <p class="toy-value-bold" id="owners-value">Muhammadxon va Zilolaxon</p>
+
+                <div class="toy-divider"></div>
+
+                <p class="toy-label" id="when-label">Bayramni boshlash vaqti:</p>
+                <p class="toy-value" id="when-value">03.08.2026 / soat 18:00</p>
+
+                <p class="toy-label" id="timer-title" style="margin-top:24px">To'y boshlanish arafasida:</p>
+                <div id="countdown" class="toy-countdown">
+                    <div class="time-item"><span id="days">00</span><p id="l-kun">kun</p></div>
+                    <div class="time-item"><span id="hours">00</span><p id="l-soat">soat</p></div>
+                    <div class="time-item"><span id="minutes">00</span><p id="l-daqiqa">daqiqa</p></div>
+                    <div class="time-item"><span id="seconds">00</span><p id="l-soniya">soniya</p></div>
+                </div>
+
+                <div class="toy-divider"></div>
+
+                <p class="toy-label" id="where-label">To'y manzili:</p>
+                <p class="toy-value">Samarqand viloyati, Chelak shahri</p>
+                <p class="toy-value-bold">"Visol"</p>
+
+                <a href="https://maps.app.goo.gl/DFhXY94HZXnbhuqj9" target="_blank" class="btn-map-fill" id="map-btn">Xaritada ochish</a>
+
+                <img class="toy-flower toy-flower-bottom" src="flower-bottom-clean.png" alt="">
+            </div>
+        </section>
+
+        <section class="section fade-in">
+            <div class="calendar-card">
+                <div class="calendar-header">
+                    <button class="calendar-nav-btn" aria-label="Previous month" disabled>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+                    </button>
+                    <span class="calendar-month-label" id="calendar-month">Avgust 2026</span>
+                    <button class="calendar-nav-btn" aria-label="Next month" disabled>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+                    </button>
+                </div>
+                <div class="calendar-weekdays">
+                    <span id="cw-0">Du</span><span id="cw-1">Se</span><span id="cw-2">Cho</span><span id="cw-3">Pa</span><span id="cw-4">Ju</span><span id="cw-5">Sha</span><span id="cw-6">Ya</span>
+                </div>
+                <div class="calendar-grid">
+                    <span class="calendar-day faded">27</span><span class="calendar-day faded">28</span><span class="calendar-day faded">29</span><span class="calendar-day faded">30</span><span class="calendar-day faded">31</span><span class="calendar-day">1</span><span class="calendar-day">2</span>
+                    <span class="calendar-day wedding-day"><span>3</span></span><span class="calendar-day">4</span><span class="calendar-day">5</span><span class="calendar-day">6</span><span class="calendar-day">7</span><span class="calendar-day">8</span><span class="calendar-day">9</span>
+                    <span class="calendar-day">10</span><span class="calendar-day">11</span><span class="calendar-day">12</span><span class="calendar-day">13</span><span class="calendar-day">14</span><span class="calendar-day">15</span><span class="calendar-day">16</span>
+                    <span class="calendar-day">17</span><span class="calendar-day">18</span><span class="calendar-day">19</span><span class="calendar-day">20</span><span class="calendar-day">21</span><span class="calendar-day">22</span><span class="calendar-day">23</span>
+                    <span class="calendar-day">24</span><span class="calendar-day">25</span><span class="calendar-day">26</span><span class="calendar-day">27</span><span class="calendar-day">28</span><span class="calendar-day">29</span><span class="calendar-day">30</span>
+                    <span class="calendar-day">31</span><span class="calendar-day faded">1</span><span class="calendar-day faded">2</span><span class="calendar-day faded">3</span><span class="calendar-day faded">4</span><span class="calendar-day faded">5</span><span class="calendar-day faded">6</span>
+                </div>
+                <p class="calendar-caption" id="calendar-caption">Bizning to'y kunimiz</p>
+                <button class="btn-add-calendar" id="add-calendar-btn" onclick="downloadICS()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M16 3v4M8 3v4M3 10h18"/><path d="M12 14v4M10 16h4"/></svg>
+                    <span id="add-calendar-text">Kalendarga qo'shish</span>
+                </button>
+            </div>
+        </section>
+
+        <section class="section fade-in love-story-section">
+            <h2 class="love-story-title" id="schedule-title">To'y kuni rejasi</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <span class="timeline-dot"><svg viewBox="0 0 24 24"><path d="M12 2a5 5 0 0 1 5 5v2a5 5 0 0 1-10 0V7a5 5 0 0 1 5-5zM4 22c0-4 3.5-7 8-7s8 3 8 7"/></svg></span>
+                    <p class="timeline-date" id="sch-time-1">17:30</p>
+                    <p class="timeline-text" id="sch-text-1">Mehmonlarni kutib olish</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-dot"><svg viewBox="0 0 24 24"><circle cx="8" cy="15" r="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="16" cy="15" r="5" fill="none" stroke="currentColor" stroke-width="2"/></svg></span>
+                    <p class="timeline-date" id="sch-time-2">18:00</p>
+                    <p class="timeline-text" id="sch-text-2">Nikoh marosimi</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-dot"><svg viewBox="0 0 24 24"><path d="M12 2l2.4 5.5 6 .6-4.5 4 1.3 5.9L12 15l-5.2 3 1.3-5.9-4.5-4 6-.6z"/></svg></span>
+                    <p class="timeline-date" id="sch-time-3">19:30</p>
+                    <p class="timeline-text" id="sch-text-3">Tabriklar va bayram dasturi</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-dot"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></span>
+                    <p class="timeline-date" id="sch-time-4">21:00</p>
+                    <p class="timeline-text" id="sch-text-4">Raqslar va kechki ziyofat</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="footer-section fade-in">
+            <p class="text-main" id="footer-text">Sizni kutib qolamiz!</p>
+            <div class="footer-mono">M &amp; Z</div>
+        </section>
+    </main>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
